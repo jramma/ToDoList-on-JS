@@ -1,4 +1,4 @@
-const toDos = []
+const toDos = JSON.parse(localStorage.getItem('toDos')) || [];
 
 const render =()=>{
     const todoList = document.getElementById('todo-list');
@@ -13,6 +13,7 @@ const render =()=>{
                 //eliminar
                 elemento.parentNode.removeChild(elemento);
                 toDos.splice(i,1)
+                saveToDos()
                 // y volvemos a llamar la función render
                 // para que se actualicen los indices de toDos
                 render()
@@ -21,7 +22,7 @@ const render =()=>{
 }
 
 window.onload = () => {
-
+    render()
     const form = document.getElementById('todo-form')
     form.onsubmit = (e) => {
         e.preventDefault();
@@ -29,10 +30,15 @@ window.onload = () => {
         const todoText = todo.value;
         todo.value = '';
         toDos.push(todoText);
+        // guardar en local storage
+        saveToDos()
         render();
     }
 
 }
 
-
+const saveToDos=()=>{
+    const todoStrings=JSON.stringify(toDos)
+    localStorage.setItem('toDos',todoStrings)
+}
 
